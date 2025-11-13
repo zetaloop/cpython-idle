@@ -15,8 +15,17 @@ import subprocess  # noqa:E402
 
 from git import Repo  # noqa:E402  # type:ignore
 
-print(f"{YELLOW}Cleaning{RESET} previous filter-repo data{GRAY}")
 repo = Repo(".")
+if repo.is_dirty(untracked_files=False):
+    print(
+        f"{YELLOW}WARNING: Working tree has uncommitted changes, "
+        f"please commit them or they will be lost!{RESET}"
+    )
+    answer = input(f"{YELLOW}>{RESET} Continue anyway? {CYAN}[y/N{CYAN}]{RESET} ")
+    if answer.lower() not in {"y", "yes"}:
+        print(f"{YELLOW}Aborting{RESET}.")
+        raise SystemExit(1)
+print(f"{YELLOW}Cleaning{RESET} previous filter-repo data{GRAY}")
 shutil.rmtree(os.path.join(repo.git_dir, "filter-repo"), ignore_errors=True)
 print(
     f"{YELLOW}Adding{RESET} remote upstream {MAGENTA}{UNDERLINE}https://github.com/python/cpython.git{RESET}"
