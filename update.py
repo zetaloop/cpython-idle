@@ -8,12 +8,16 @@ MAGENTA = "\033[35m"
 CYAN = "\033[36m"
 print(f"{GREEN}====== CPython IDLE Update Script ======{RESET}")
 
+import os  # noqa:E402
 import re  # noqa:E402
+import shutil  # noqa:E402
 import subprocess  # noqa:E402
 
 from git import Repo  # noqa:E402  # type:ignore
 
+print(f"{YELLOW}Cleaning{RESET} previous filter-repo data{GRAY}")
 repo = Repo(".")
+shutil.rmtree(os.path.join(repo.git_dir, "filter-repo"), ignore_errors=True)
 print(
     f"{YELLOW}Adding{RESET} remote upstream {MAGENTA}{UNDERLINE}https://github.com/python/cpython.git{RESET}"
 )
